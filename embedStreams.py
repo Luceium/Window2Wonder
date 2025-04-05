@@ -37,12 +37,12 @@ def generate_embedding(client: OpenAI, text: str) -> List[float]:
             model="text-embedding-3-small",
             input=text,
             encoding_format='float',
-
+            dimensions=256
         )
         return response.data[0].embedding
     except Exception as e:
         print(f"Error generating embedding: {e}")
-        return 0
+        return None
 
 # Stream processing
 def get_stream_text(stream: Dict[str, Any]) -> str:
@@ -51,7 +51,7 @@ def get_stream_text(stream: Dict[str, Any]) -> str:
 
 def process_stream(stream: Dict[str, Any], client: OpenAI) -> Dict[str, Any]:
     """Process a single stream to add embedding or return existing one"""
-    if 'embedding' in stream and stream['embedding'] is not 0:
+    if 'embedding' in stream and len(stream['embedding']) == 256:
         print(f"Stream {stream['name']} already has an embedding")
         return stream
     updated_stream = stream.copy()
