@@ -3,7 +3,8 @@ from pymongo.operations import SearchIndexModel
 from dotenv import load_dotenv
 import os
 import time
-from embedStreams import generate_embedding, create_openai_client
+from embed import DIMENSIONS, generate_embedding
+from utils import create_openai_client
 
 # connect to your Atlas cluster
 load_dotenv('.env.local')
@@ -19,18 +20,18 @@ def search(query: str):
   if searchVector is None:
     raise ValueError("Failed to generate embedding for the query")
   # check if the embedding is of the correct length
-  if len(searchVector) != 256:
+  if len(searchVector) != DIMENSIONS:
     raise ValueError("Embedding length is not 256")
   
   # define pipeline
   pipeline = [
     {
       '$vectorSearch': {
-        'index': 'vector_index', 
-        'path': 'embedding', 
-        'queryVector': searchVector, 
-        'numCandidates': 50, 
-        'limit': 5
+        'index': 'description-vector-index',
+        'path': 'embedding',
+        'queryVector': searchVector,
+        'numCandidates': 50,
+        'limit': 5,
       }
     }, {
       '$project': {
@@ -47,7 +48,7 @@ def search(query: str):
   return mongo_client["streams"]["streams"].aggregate(pipeline)
 
 if __name__ == "__main__":
-  res = search("Take me to a place to build empathy for the earth")
+  res = search("Show me the earth")
   print("Search Complete")
 
   # print results

@@ -12,7 +12,7 @@ from utils import create_mongo_client, create_openai_client
 DIMENSIONS = 1024
 
 # File operations
-def read_streams(file_path: str = 'streams.json') -> List[Dict[str, Any]]:
+def read_streams(file_path: str = 'streams.local.json') -> List[Dict[str, Any]]:
     """Read streams from the json file"""
     with open(file_path, 'r') as file:
         return json.load(file)
@@ -90,8 +90,8 @@ def upload_streams_to_mongo(streams: List[Dict[str, Any]]) -> None:
     collection = mongo_client["streams"]["streams"]
     collection.insert_many(streams)
 
-    # Reset streams.json after upload
-    with open('streams.json', 'w') as file:
+    # Reset streams.local.json after upload
+    with open('streams.local.json', 'w') as file:
         json.dump([], file, indent=2)
 
 # Main function
