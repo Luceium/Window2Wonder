@@ -1,3 +1,4 @@
+import hashlib
 import os
 import json
 from openai import OpenAI
@@ -26,12 +27,39 @@ def write_streams(streams: List[Dict[str, Any]], file_path: str = 'streams.json'
         json.dump(streams, file, indent=2)
 
 # Embedding generation
-def create_openai_client(api_key: str) -> OpenAI:
+def create_openai_client() -> OpenAI:
     """Create and return an OpenAI client"""
+    api_key = load_api_key()
     return OpenAI(api_key=api_key)
 
+def load_embedding_cache(cache_file: str = 'embeddingCache.json') -> Dict[str, List[float]]:
+    """Load the embedding cache from file"""
+    if not os.path.exists(cache_file):
+        return {}
+    with open(cache_file, 'r') as f:
+        return json.load(f)
+
+def save_embedding_cache(cache: Dict[str, List[float]], cache_file: str = 'embeddingCache.json') -> None:
+    """Save the embedding cache to file"""
+    with open(cache_file, 'w') as f:
+        json.dump(cache, f, indent=2)
+
+def get_text_hash(text: str) -> str:
+    """Generate a stable hash for the input text"""
+    return hashlib.md5(text.encode('utf-8')).hexdigest()
+
 def generate_embedding(client: OpenAI, text: str) -> List[float]:
-    """Generate embedding for text using OpenAI API"""
+    """Generate embedding for text using OpenAI API with caching"""
+    # Load cache
+    cache = load_embedding_cache()
+    text_hash = get_text_hash(text)
+
+    # Check cache
+    if text_hash in cache:
+        print(f"Using cached embedding for: {text[:25]}{"..." if len(text) > 25 else ""}")
+        return cache[text_hash]
+
+    # Generate new embedding
     try:
         response = client.embeddings.create(
             model="text-embedding-3-small",
@@ -39,7 +67,13 @@ def generate_embedding(client: OpenAI, text: str) -> List[float]:
             encoding_format='float',
             dimensions=256
         )
-        return response.data[0].embedding
+        embedding = response.data[0].embedding
+
+        # Update cache
+        cache[text_hash] = embedding
+        save_embedding_cache(cache)
+
+        return embedding
     except Exception as e:
         print(f"Error generating embedding: {e}")
         return None
@@ -78,8 +112,7 @@ def process_all_streams(streams: List[Dict[str, Any]], client: OpenAI) -> List[D
 def main():
     try:
         # Set up environment and client
-        api_key = load_api_key()
-        client = create_openai_client(api_key)
+        client = create_openai_client()
         
         # Read streams
         streams = read_streams()
