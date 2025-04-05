@@ -28,7 +28,7 @@ search_index_model = SearchIndexModel(
       }
     ]
   },
-  name="vector_index",
+  name="description-vector-index",
   type="vectorSearch"
 )
 
