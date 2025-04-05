@@ -32,14 +32,14 @@ def create_openai_client() -> OpenAI:
     api_key = load_api_key()
     return OpenAI(api_key=api_key)
 
-def load_embedding_cache(cache_file: str = 'embeddingCache.json') -> Dict[str, List[float]]:
+def load_embedding_cache(cache_file: str = 'embeddingCache.local.json') -> Dict[str, List[float]]:
     """Load the embedding cache from file"""
     if not os.path.exists(cache_file):
         return {}
     with open(cache_file, 'r') as f:
         return json.load(f)
 
-def save_embedding_cache(cache: Dict[str, List[float]], cache_file: str = 'embeddingCache.json') -> None:
+def save_embedding_cache(cache: Dict[str, List[float]], cache_file: str = 'embeddingCache.local.json') -> None:
     """Save the embedding cache to file"""
     with open(cache_file, 'w') as f:
         json.dump(cache, f, indent=2)
