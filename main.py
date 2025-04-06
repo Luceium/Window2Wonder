@@ -1,7 +1,7 @@
 from vectorSearch import search
 from voice2text import transcribe_speech
 from wakeWord import WakeWordListener
-from display import display_results
+from youtube_player import play_video
 
 def change_stream():
     # Get transcript of request with faster whisper
@@ -9,7 +9,7 @@ def change_stream():
     if text:
         print(f"Transcription: {text}")
         res = search(text)
-        display_results(res)
+        play_video(res[0]["url"])
     else:
         print("No transcription available.")
 

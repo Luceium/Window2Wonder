@@ -14,3 +14,8 @@ Add streams to `streams.local.json` in the format of
 Note that empty array is a placeholder and will be replaced before it's uploaded.
 
 Then run `python embed.py` to upload the streams to our db.
+
+# RUN ON PI
+
+sudo apt-get install libspeexdsp-dev
+pip install https://github.com/dscripka/openWakeWord/releases/download/v0.1.1/speexdsp_ns-0.1.2-cp38-cp38-linux_x86_64.whl
