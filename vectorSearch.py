@@ -46,12 +46,11 @@ def search(query: str):
   ]
 
   # run pipeline
-  return mongo_client["streams"]["streams"].aggregate(pipeline)
+  return mongo_client["streams"]["streams"].aggregate(pipeline).to_list(1)[0]["url"]
 
 if __name__ == "__main__":
   res = search("I want to see a bat in a cave")
   print("Search Complete")
 
-  # print results
-  for i in res:
-      print(i)
+  print("first url: ", res)
+  
