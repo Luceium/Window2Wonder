@@ -9,7 +9,7 @@ def change_stream():
     if text:
         print(f"Transcription: {text}")
         res = search(text)
-        play_video(res[0]["url"])
+        play_video(res)
     else:
         print("No transcription available.")
 

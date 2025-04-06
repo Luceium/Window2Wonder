@@ -1,4 +1,4 @@
 *.local*
 __pycache__/
-
+d
 venv/
