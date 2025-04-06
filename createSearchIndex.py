@@ -4,6 +4,8 @@ from dotenv import load_dotenv
 import os
 import time
 
+from embed import DIMENSIONS
+
 # Connect to your Atlas deployment
 load_dotenv('.env.local')
 uri = os.getenv('mongo')
@@ -22,7 +24,7 @@ search_index_model = SearchIndexModel(
       {
         "type": "vector",
         "path": "embedding",
-        "numDimensions": 256,
+        "numDimensions": DIMENSIONS,
         "similarity": "dotProduct",
         "quantization": "scalar"
       }

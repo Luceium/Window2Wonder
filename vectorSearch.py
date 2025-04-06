@@ -48,7 +48,7 @@ def search(query: str):
   return mongo_client["streams"]["streams"].aggregate(pipeline)
 
 if __name__ == "__main__":
-  res = search("Show me the earth")
+  res = search("Show me the deep sea")
   print("Search Complete")
 
   # print results
