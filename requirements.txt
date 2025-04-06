@@ -1,5 +1,4 @@
 annotated-types==0.7.0
-crypt_r==3.13.1
 numpy==2.2.4
 onnxruntime==1.21.0
 openai==1.70.0
