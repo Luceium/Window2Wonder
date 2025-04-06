@@ -7,10 +7,10 @@ Add streams to `streams.local.json` in the format of
   "name": "Yosemite Falls Webcam",
   "url": "https://arc.lib.montana.edu/national-park-service-webcams/item/132",
   "description": "Features one of the tallest waterfalls in North America, with a total height of 2,425 feet. Provides a serene view of cascading water surrounded by pine trees and occasional wildlife like hawks or falcons.",
-  "embedding": 0
+  "embedding": []
 }
 ```
 
-Note that 0 is a placeholder and will be replaced before it's uploaded.
+Note that empty array is a placeholder and will be replaced before it's uploaded.
 
 Then run `python embed.py` to upload the streams to our db.

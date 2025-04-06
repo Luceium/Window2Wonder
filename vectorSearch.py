@@ -37,6 +37,7 @@ def search(query: str):
       '$project': {
         '_id': 0,
         'url': 1,
+        'names': 1,
         'score': {
           '$meta': 'vectorSearchScore'
         }
@@ -48,7 +49,7 @@ def search(query: str):
   return mongo_client["streams"]["streams"].aggregate(pipeline)
 
 if __name__ == "__main__":
-  res = search("Show me the deep sea")
+  res = search("I want to see a bat in a cave")
   print("Search Complete")
 
   # print results
